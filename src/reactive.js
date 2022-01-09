@@ -1,21 +1,20 @@
 import {isObject} from "./utils";
 
-export function reactive(initialData) {
-  if(!initialData || !isObject(initialData))
-    return
-  console.log("reactive()")
-  const proxy = new Proxy(initialData, {
-    get(target, p, receiver) {
-      console.log(target, p)
+export function reactive(scope) {
+  if(!scope || !isObject(scope))
+    return null
+  let proxy = new Proxy(scope, {
+    get: function (target, p, receiver) {
+      console.log(`get procKey: ${p}`)
       return target[p]
     },
-    set(target, p, value, receiver) {
-      target[p] = value
-
+    set: function (target, p, value, receiver) {
+      console.log(`set procKey: ${p}`)
+      target[p] = reactive(value) || value
     }
   });
-  Object.keys(initialData).forEach(key => {
-    reactive(initialData[key])
+  Object.keys(scope).forEach(key => {
+    scope[key] = reactive(scope[key]) || scope[key]
   })
   return proxy
 }

@@ -17,6 +17,11 @@
     person: {
       age: 10,
       gender: 'man'
+    },
+    test: function (val) {
+      console.log(`age: ${this.person.age}; val: ${val}`)
+      this.person.age = val
+      console.log('age: ' + this.person.age)
     }
   });
 </script>
