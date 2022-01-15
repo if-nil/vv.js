@@ -1,4 +1,5 @@
 import {reactive} from "./reactive";
+import {walk} from "./walk";
 
 const bindMethods = scope => {
   Object.keys(scope).forEach(key => {
@@ -11,7 +12,10 @@ const bindMethods = scope => {
 
 export default class {
   constructor(initialData) {
-    this.proxyData = reactive(initialData)
-    // bindMethods(this.proxyData)
+    this.scope = reactive(initialData)
+    this.el = document.querySelector(`[vv]`) ||
+      document.documentElement
+    this.effect = null
+    walk(this.el, this)
   }
 }

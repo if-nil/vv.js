@@ -7,16 +7,22 @@
   <title>Vite App</title>
 </head>
 <body>
-<div id="app"></div>
-<script type="module" src="/main.js"></script>
+<div vv>
+  <div vv.if="this.person.age !== 18">vv.if</div>
+  <h1>{{name}}</h1>
+  <h2 vv.click="this.clickFn()">click</h2>
+</div>
 <script type="module">
   import app from './src/app'
 
   window.app = new app({
-    name: 'hello',
+    name: 'hello vv.js',
     person: {
-      age: 10,
+      age: 18,
       gender: 'man'
+    },
+    clickFn: function () {
+      alert(this.name)
     },
     test: function (val) {
       console.log(`age: ${this.person.age}; val: ${val}`)
