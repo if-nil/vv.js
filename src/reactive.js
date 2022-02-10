@@ -1,7 +1,19 @@
 import {isObject} from "./utils";
 
-function scheduler(queue) {
-  queue.forEach(job => job())
+function scheduler(queue, key) {
+  queue[key].forEach(fn => {
+    fn()
+  })
+}
+
+const createCtx = scope => {
+  scope.$jobQueue = new WeakMap
+  scope.effect = (name, fn) => {
+    if (!scope.$jobQueue[name])
+      scope.$jobQueue[name] = []
+    scope.$jobQueue[name].push(fn)
+  }
+  return scope
 }
 
 export function reactive(scope) {
@@ -9,20 +21,17 @@ export function reactive(scope) {
     return scope
   let proxy = new Proxy(scope, {
     get: function (target, p, receiver) {
-      console.log(`get procKey: ${p}`)
       return target[p]
     },
     set: function (target, p, value, receiver) {
-      console.log(`set procKey: ${target[p]}`)
       target[p] = reactive(value) || value
-      scheduler(this.queue)
+      scheduler(scope.$jobQueue, p)
       return true
-    },
-    queue: []
+    }
   });
   Object.keys(scope).forEach(key => {
     scope[key] = reactive(scope[key]) || scope[key]
   })
+  scope = createCtx(scope)
   return proxy
 }
-

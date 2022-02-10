@@ -11,12 +11,21 @@ export const checkAttr = (el, name) => {
 }
 
 export function getSubObject(str, ctx) {
+  if(!str) {
+    return [null, null, null]
+  }
   const val = str.split('.')
   let data = ctx.scope
-  val.forEach(key => {
+  let obj = ctx.scope
+  let k = ''
+  val.forEach((key, index) => {
+    if (index === val.length - 2) {
+      obj = data[key]
+    }
+    k = key
     data = data[key] || null
     if(!data)
-      return null
+      return [null, null]
   })
-  return data
+  return [k, data, obj]
 }

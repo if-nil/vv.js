@@ -1,7 +1,7 @@
 import {checkAttr} from "./utils";
-import {_if} from "./_if";
-import {_click} from "./_click";
-import {_text} from "./_text";
+import {_if} from "./directives/_if";
+import {_click} from "./directives/_click";
+import {_text} from "./directives/_text";
 
 export const walk = (node, ctx) => {
   const type = node.nodeType
@@ -23,11 +23,9 @@ function walkChild(node, ctx) {
 function handleElement(node, ctx) {
   if (node.hasAttribute('vv.if')) {
     const val = checkAttr(node, 'vv.if')
-    console.log("vv.if")
     _if(node, val, ctx)
   } else if (node.hasAttribute('vv.click')) {
     const val = checkAttr(node, 'vv.click')
-    console.log("vv.click")
     _click(node, val, ctx)
   }
 }

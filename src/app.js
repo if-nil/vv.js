@@ -4,7 +4,6 @@ import {walk} from "./walk";
 const bindMethods = scope => {
   Object.keys(scope).forEach(key => {
     if (typeof scope[key] === 'function') {
-      console.log('func')
       scope[key] = scope[key].bind(scope)
     }
   })
@@ -12,6 +11,9 @@ const bindMethods = scope => {
 
 export default class {
   constructor(initialData) {
+    if (!initialData) {
+      throw "empty parameters"
+    }
     this.scope = reactive(initialData)
     this.el = document.querySelector(`[vv]`) ||
       document.documentElement
